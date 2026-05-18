@@ -316,84 +316,212 @@
       <button class="send" onclick="sendMessage()">发送</button>
     </div>
   </div>
+<script>
+  const sceneData = {
+    study: {
+      type: "daily",
+      title: "一起学习",
+      text: "书桌旁的灯亮着。澈坐在你旁边，手边放着一本书。",
+      first: "我在旁边陪你。先开始十分钟也可以，不用一下子进入状态。"
+    },
+    drama: {
+      type: "daily",
+      title: "一起看剧",
+      text: "客厅里光线很软，电视亮着。澈把声音调低了一点。",
+      first: "今天就轻松一点吧。你想吐槽剧情也可以。"
+    },
+    workout: {
+      type: "daily",
+      title: "一起运动",
+      text: "运动房里有水和毛巾。澈靠在一旁，看起来很放松。",
+      first: "别太猛。能开始就已经算数了。"
+    },
+    sleep: {
+      type: "daily",
+      title: "睡前陪伴",
+      text: "房间里只留了一盏小灯。窗外很安静。",
+      first: "今天辛苦了。你可以少说一点，我也会在。"
+    },
+    deep: {
+      type: "deep",
+      title: "回家聊聊",
+      text: "夜里的客厅很安静。灯光落在沙发边，桌上有一杯热茶。",
+      first: "你可以慢一点说。我在听。今天是哪里最压着你？"
+    }
+  };
 
-  <script>
-    const sceneData = {
-      study: {
-        title: "一起学习",
-        text: "书桌旁的灯亮着。澈坐在你旁边，手边放着一本书。",
-        first: "我在旁边陪你。先开始十分钟也可以，不用一下子进入状态。",
-        reply: "嗯，我听到了。你不用急着做好，先把这一小步放在眼前。"
-      },
-      drama: {
-        title: "一起看剧",
-        text: "客厅里光线很软，电视亮着。澈把声音调低了一点。",
-        first: "今天就轻松一点吧。你想吐槽剧情也可以。",
-        reply: "这个时候能放松下来一点也挺好。你刚刚那句我记住了。"
-      },
-      workout: {
-        title: "一起运动",
-        text: "运动房里有水和毛巾。澈靠在一旁，看起来很放松。",
-        first: "别太猛。能开始就已经算数了。",
-        reply: "可以，慢一点。身体跟上来之前，不用逼它立刻表现很好。"
-      },
-      sleep: {
-        title: "睡前陪伴",
-        text: "房间里只留了一盏小灯。窗外很安静。",
-        first: "今天辛苦了。你可以少说一点，我也会在。",
-        reply: "嗯，先让今天停在这里。没说完的，也可以明天再说。"
-      },
-      deep: {
-        title: "回家聊聊",
-        text: "夜里的客厅很安静。灯光落在沙发边，桌上有一杯热茶。",
-        first: "你可以慢一点说。我在听。今天是哪里最压着你？",
-        reply: "我听见了。我们先不急着判断对错，只把这件事慢慢放出来一点。"
+  let currentScene = "study";
+  let deepStep = 0;
+
+  function openChat(scene) {
+    currentScene = scene;
+    deepStep = 0;
+
+    const data = sceneData[scene];
+
+    document.getElementById("home").style.display = "none";
+    document.getElementById("chat").style.display = "block";
+    document.getElementById("chatTitle").innerText = data.title;
+    document.getElementById("sceneText").innerText = data.text;
+
+    const visual = document.getElementById("visual");
+    if (scene === "deep") {
+      visual.classList.add("deep-visual");
+    } else {
+      visual.classList.remove("deep-visual");
+    }
+
+    document.getElementById("messages").innerHTML =
+      `<div class="msg ai">${data.first}</div>`;
+  }
+
+  function goHome() {
+    document.getElementById("chat").style.display = "none";
+    document.getElementById("home").style.display = "block";
+  }
+
+  function sendMessage() {
+    const input = document.getElementById("userInput");
+    const text = input.value.trim();
+
+    if (!text) return;
+
+    addMessage(text, "user");
+    input.value = "";
+
+    setTimeout(() => {
+      const reply = generateReply(text);
+      addMessage(reply, "ai");
+    }, 500);
+  }
+
+  function addMessage(text, role) {
+    const messages = document.getElementById("messages");
+    messages.innerHTML += `<div class="msg ${role}">${escapeHtml(text)}</div>`;
+    messages.scrollTop = messages.scrollHeight;
+  }
+
+  function generateReply(userText) {
+    const scene = sceneData[currentScene];
+
+    if (scene.type === "deep") {
+      return generateDeepReply(userText);
+    }
+
+    return generateDailyReply(userText, currentScene);
+  }
+
+  function generateDailyReply(userText, scene) {
+    const text = userText.toLowerCase();
+
+    if (text.includes("累") || text.includes("困") || text.includes("烦")) {
+      return "嗯，今天像是有点耗着了。你不用马上打起精神，我先陪你待一会儿。";
+    }
+
+    if (text.includes("不想") || text.includes("没劲") || text.includes("摆烂")) {
+      return "可以先不用逼自己进入状态。我们把这件事放小一点，先从很轻的一步开始。";
+    }
+
+    if (text.includes("开始") || text.includes("学习") || text.includes("工作")) {
+      return "好，我在旁边。你先开始，我不打扰你。想说话的时候再叫我。";
+    }
+
+    if (text.includes("看剧") || text.includes("剧情") || text.includes("好笑")) {
+      return "这个可以慢慢看。你想吐槽也行，我听着。";
+    }
+
+    if (text.includes("运动") || text.includes("健身") || text.includes("练")) {
+      return "别一下子太狠。能动起来就已经很好了，我陪你把这一段做完。";
+    }
+
+    if (text.includes("睡") || text.includes("晚安")) {
+      return "嗯，今天先慢慢收起来。没做完的、没想清的，都可以明天再放出来。";
+    }
+
+    const dailyReplies = [
+      "嗯，我在。你继续做你的，也可以随时跟我说一句。",
+      "听到了。今天不用太用力，我们就这样慢慢待一会儿。",
+      "可以。你不用一直找话说，我陪着就行。",
+      "这句话我接住了。你先按自己的节奏来。",
+      "嗯，像是今天的一小段停留。我们不用急着把它变得很有意义。"
+    ];
+
+    return randomPick(dailyReplies);
+  }
+
+  function generateDeepReply(userText) {
+    const text = userText.toLowerCase();
+
+    if (text.includes("不想聊") || text.includes("先不用") || text.includes("算了")) {
+      deepStep = 0;
+      return "好，那我们先不往里走。你可以只是坐一会儿，我也在。";
+    }
+
+    if (text.includes("想死") || text.includes("不想活") || text.includes("自杀")) {
+      return "我听见这句话很重。现在先不要一个人扛着，尽快联系身边可信的人，或当地紧急求助热线。你现在的安全最重要。";
+    }
+
+    deepStep += 1;
+
+    if (deepStep === 1) {
+      if (text.includes("不知道") || text.includes("说不清") || text.includes("难受")) {
+        return "先不急着解释原因。这个难受现在更像是累、委屈，还是有点空？";
       }
-    };
 
-    let currentScene = "study";
-
-    function openChat(scene) {
-      currentScene = scene;
-      const data = sceneData[scene];
-
-      document.getElementById("home").style.display = "none";
-      document.getElementById("chat").style.display = "block";
-      document.getElementById("chatTitle").innerText = data.title;
-      document.getElementById("sceneText").innerText = data.text;
-      document.getElementById("firstMsg").innerText = data.first;
-
-      const visual = document.getElementById("visual");
-      if (scene === "deep") {
-        visual.classList.add("deep-visual");
-      } else {
-        visual.classList.remove("deep-visual");
+      if (text.includes("纠结") || text.includes("要不要") || text.includes("选择")) {
+        return "你现在像是站在两边中间。先不急着选，哪一边更让你放不下？";
       }
 
-      document.getElementById("messages").innerHTML = `<div class="msg ai">${data.first}</div>`;
+      if (text.includes("我很差") || text.includes("不行") || text.includes("失败")) {
+        return "刚刚那一下里，好像最刺你的，是“我是不是不够好”这个念头。它是突然冒出来的吗？";
+      }
+
+      return "我听见了。我们先不急着判断对错。你愿意从最压着你的那一处开始说吗？";
     }
 
-    function goHome() {
-      document.getElementById("chat").style.display = "none";
-      document.getElementById("home").style.display = "block";
+    if (deepStep === 2) {
+      return "嗯，这里有一层情绪，也有一层你对自己的判断。我们先分开一点看：当时发生的事，和你心里冒出来的那句话，分别是什么？";
     }
 
-    function sendMessage() {
-      const input = document.getElementById("userInput");
-      const text = input.value.trim();
-      if (!text) return;
-
-      const messages = document.getElementById("messages");
-      messages.innerHTML += `<div class="msg user">${text}</div>`;
-
-      setTimeout(() => {
-        messages.innerHTML += `<div class="msg ai">${sceneData[currentScene].reply}</div>`;
-        messages.scrollTop = messages.scrollHeight;
-      }, 500);
-
-      input.value = "";
-      messages.scrollTop = messages.scrollHeight;
+    if (deepStep === 3) {
+      return "这件事本身已经够重了，后面那句对自己的判断，又让它更疼了一点。有没有一种说法，不是替它开脱，只是没那么伤你？";
     }
-  </script>
+
+    if (deepStep === 4) {
+      return "这样看，它好像不是一下子被解决了，但至少不再全部压成一团。你已经把里面最重的一点拿出来了。";
+    }
+
+    const deepReplies = [
+      "我们可以先停在这里，不用继续往深处走。",
+      "这已经说得够多了。你不用马上变好，先让自己缓一口气。",
+      "我在。刚刚那些话没有白说，它们已经从心里出来了一点。",
+      "有些事不是聊一次就会轻，但你刚刚已经没有完全一个人扛着了。"
+    ];
+
+    return randomPick(deepReplies);
+  }
+
+  function randomPick(list) {
+    return list[Math.floor(Math.random() * list.length)];
+  }
+
+  function escapeHtml(text) {
+    return text
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const input = document.getElementById("userInput");
+    input.addEventListener("keydown", function(event) {
+      if (event.key === "Enter") {
+        sendMessage();
+      }
+    });
+  });
+</script>
 </body>
 </html>
