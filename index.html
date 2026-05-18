@@ -246,6 +246,27 @@
       color: #7a7068;
       line-height: 1.6;
     }
+    .plan-input-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 14px;
+  margin-bottom: 12px;
+}
+
+.plan-input-row input {
+  background: #f6f1ea;
+}
+
+.mini-button {
+  border: none;
+  border-radius: 16px;
+  padding: 0 16px;
+  background: #2f3742;
+  color: white;
+  cursor: pointer;
+  font-size: 14px;
+  white-space: nowrap;
+}
   </style>
 </head>
 <body>
@@ -284,16 +305,28 @@
         </div>
         <button class="deep-button" onclick="openChat('deep')">回家聊聊</button>
       </div>
+<div class="card">
+  <div class="small-title">澈的今天</div>
+  <div class="schedule-item"><span>10:00</span><span>在家工作</span></div>
+  <div class="schedule-item"><span>17:30</span><span>去运动</span></div>
+  <div class="schedule-item"><span>21:00</span><span>看书 / 放松</span></div>
+  <div class="schedule-item"><span>23:30</span><span>可以陪你睡前聊聊</span></div>
+</div>
 
-      <div class="card">
-        <div class="small-title">今日安排</div>
-        <div class="schedule-item"><span>09:00</span><span>学习 / 工作</span></div>
-        <div class="schedule-item"><span>19:30</span><span>运动</span></div>
-        <div class="schedule-item"><span>22:00</span><span>看剧放松</span></div>
-        <div class="schedule-item"><span>23:30</span><span>睡前聊天</span></div>
-      </div>
-    </div>
+<div class="card">
+  <div class="small-title">你的今天</div>
+  <div class="hint">写下一件今天想做的事，也可以让澈陪你一起做。</div>
+
+  <div class="plan-input-row">
+    <input id="planInput" placeholder="比如：20:00 学习英语" />
+    <button class="mini-button" onclick="addPlan()">添加</button>
   </div>
+
+  <div id="userPlans">
+    <div class="schedule-item"><span>20:00</span><span>学习英语</span></div>
+    <div class="schedule-item"><span>22:00</span><span>看一集剧放松</span></div>
+  </div>
+</div>
 
   <div class="app chat-page" id="chat">
     <div class="chat-header">
@@ -505,15 +538,40 @@
     return list[Math.floor(Math.random() * list.length)];
   }
 
-  function escapeHtml(text) {
-    return text
-      .replaceAll("&", "&amp;")
-      .replaceAll("<", "&lt;")
-      .replaceAll(">", "&gt;")
-      .replaceAll('"', "&quot;")
-      .replaceAll("'", "&#039;");
+function escapeHtml(text) {
+  return text
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+  function addPlan() {
+  const input = document.getElementById("planInput");
+  const text = input.value.trim();
+
+  if (!text) return;
+
+  const userPlans = document.getElementById("userPlans");
+
+  let time = "今天";
+  let content = text;
+
+  const timeMatch = text.match(/^(\d{1,2}:\d{2})\s*(.*)$/);
+  if (timeMatch) {
+    time = timeMatch[1];
+    content = timeMatch[2] || "一件事";
   }
 
+  userPlans.innerHTML += `
+    <div class="schedule-item">
+      <span>${escapeHtml(time)}</span>
+      <span>${escapeHtml(content)}</span>
+    </div>
+  `;
+
+  input.value = "";
+}
   document.addEventListener("DOMContentLoaded", () => {
     const input = document.getElementById("userInput");
     input.addEventListener("keydown", function(event) {
