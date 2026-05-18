@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>澈｜AI陪伴 Demo</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+      background: #f6f1ea;
+      color: #2d2a26;
+    }
+
+    .app {
+      max-width: 430px;
+      margin: 0 auto;
+      min-height: 100vh;
+      background: #fbf7f1;
+      box-shadow: 0 0 30px rgba(0,0,0,0.08);
+    }
+
+    header {
+      padding: 28px 22px 18px;
+      background: linear-gradient(180deg, #2e3642, #59616b);
+      color: white;
+      border-bottom-left-radius: 28px;
+      border-bottom-right-radius: 28px;
+    }
+
+    .tag {
+      font-size: 13px;
+      opacity: 0.8;
+      margin-bottom: 8px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 28px;
+      letter-spacing: 2px;
+    }
+
+    .subtitle {
+      margin-top: 10px;
+      line-height: 1.6;
+      font-size: 14px;
+      opacity: 0.92;
+    }
+
+    .section {
+      padding: 20px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 22px;
+      padding: 18px;
+      margin-bottom: 16px;
+      box-shadow: 0 8px 24px rgba(80, 60, 40, 0.08);
+    }
+
+    .character {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+    }
+
+    .avatar {
+      width: 72px;
+      height: 72px;
+      border-radius: 24px;
+      background: linear-gradient(135deg, #d8dce1, #9ca6b2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 34px;
+    }
+
+    .name {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .status {
+      font-size: 14px;
+      color: #6b6259;
+      line-height: 1.5;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .scene {
+      border: none;
+      border-radius: 18px;
+      padding: 16px;
+      min-height: 96px;
+      background: #f1ebe2;
+      text-align: left;
+      cursor: pointer;
+      font-size: 15px;
+      color: #2d2a26;
+    }
+
+    .scene span {
+      display: block;
+      font-size: 26px;
+      margin-bottom: 8px;
+    }
+
+    .deep-button {
+      width: 100%;
+      border: none;
+      border-radius: 18px;
+      padding: 16px;
+      background: #2f3742;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 6px;
+    }
+
+    .chat-page {
+      display: none;
+      min-height: 100vh;
+      background: #eee6dc;
+    }
+
+    .chat-header {
+      padding: 18px;
+      background: #3d4652;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .back {
+      border: none;
+      background: rgba(255,255,255,0.18);
+      color: white;
+      border-radius: 12px;
+      padding: 8px 12px;
+      cursor: pointer;
+    }
+
+    .scene-visual {
+      height: 260px;
+      padding: 20px;
+      display: flex;
+      align-items: flex-end;
+      background: linear-gradient(180deg, #65707b, #e5d9ca);
+    }
+
+    .deep-visual {
+      background: linear-gradient(180deg, #342d2b, #b98d67);
+    }
+
+    .person-card {
+      width: 100%;
+      padding: 18px;
+      border-radius: 22px;
+      background: rgba(255,255,255,0.75);
+      backdrop-filter: blur(8px);
+      line-height: 1.6;
+    }
+
+    .messages {
+      padding: 18px;
+      height: calc(100vh - 420px);
+      overflow-y: auto;
+    }
+
+    .msg {
+      max-width: 82%;
+      padding: 12px 14px;
+      border-radius: 18px;
+      margin-bottom: 12px;
+      line-height: 1.55;
+      font-size: 15px;
+    }
+
+    .ai {
+      background: white;
+      border-bottom-left-radius: 6px;
+    }
+
+    .user {
+      background: #3d4652;
+      color: white;
+      margin-left: auto;
+      border-bottom-right-radius: 6px;
+    }
+
+    .input-area {
+      padding: 14px;
+      display: flex;
+      gap: 10px;
+      background: #fbf7f1;
+      position: sticky;
+      bottom: 0;
+    }
+
+    input {
+      flex: 1;
+      border: none;
+      border-radius: 16px;
+      padding: 14px;
+      font-size: 15px;
+      outline: none;
+    }
+
+    .send {
+      border: none;
+      border-radius: 16px;
+      padding: 0 18px;
+      background: #2f3742;
+      color: white;
+      cursor: pointer;
+    }
+
+    .schedule-item {
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px solid #eee;
+      padding: 10px 0;
+      font-size: 14px;
+    }
+
+    .small-title {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .hint {
+      font-size: 13px;
+      color: #7a7068;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+  <div class="app" id="home">
+    <header>
+      <div class="tag">AI 陪伴 · 日常一起生活</div>
+      <h1>澈</h1>
+      <div class="subtitle">
+        他有自己的生活节奏，也可以在你的日常里陪你一段。学习、看剧、运动，或者只是认真聊聊。
+      </div>
+    </header>
+
+    <div class="section">
+      <div class="card character">
+        <div class="avatar">☾</div>
+        <div>
+          <div class="name">澈</div>
+          <div class="status">今天在家工作。晚上可能会看一会儿书。如果你要学习，他可以陪你安静待一会儿。</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="small-title">今天可以一起做</div>
+        <div class="grid">
+          <button class="scene" onclick="openChat('study')"><span>📖</span>一起学习</button>
+          <button class="scene" onclick="openChat('drama')"><span>📺</span>一起看剧</button>
+          <button class="scene" onclick="openChat('workout')"><span>🏃</span>一起运动</button>
+          <button class="scene" onclick="openChat('sleep')"><span>🌙</span>睡前陪伴</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="small-title">想认真聊聊吗？</div>
+        <div class="hint">
+          如果今天有些事压着你，可以回到一个更安静的地方，慢慢说。
+        </div>
+        <button class="deep-button" onclick="openChat('deep')">回家聊聊</button>
+      </div>
+
+      <div class="card">
+        <div class="small-title">今日安排</div>
+        <div class="schedule-item"><span>09:00</span><span>学习 / 工作</span></div>
+        <div class="schedule-item"><span>19:30</span><span>运动</span></div>
+        <div class="schedule-item"><span>22:00</span><span>看剧放松</span></div>
+        <div class="schedule-item"><span>23:30</span><span>睡前聊天</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="app chat-page" id="chat">
+    <div class="chat-header">
+      <div id="chatTitle">一起学习</div>
+      <button class="back" onclick="goHome()">返回</button>
+    </div>
+
+    <div class="scene-visual" id="visual">
+      <div class="person-card" id="sceneText">
+        澈坐在旁边，翻开书。这里很安静，你可以慢慢开始。
+      </div>
+    </div>
+
+    <div class="messages" id="messages">
+      <div class="msg ai" id="firstMsg">我在。你先做你的，不用一直说话。</div>
+    </div>
+
+    <div class="input-area">
+      <input id="userInput" placeholder="和他说点什么..." />
+      <button class="send" onclick="sendMessage()">发送</button>
+    </div>
+  </div>
+
+  <script>
+    const sceneData = {
+      study: {
+        title: "一起学习",
+        text: "书桌旁的灯亮着。澈坐在你旁边，手边放着一本书。",
+        first: "我在旁边陪你。先开始十分钟也可以，不用一下子进入状态。",
+        reply: "嗯，我听到了。你不用急着做好，先把这一小步放在眼前。"
+      },
+      drama: {
+        title: "一起看剧",
+        text: "客厅里光线很软，电视亮着。澈把声音调低了一点。",
+        first: "今天就轻松一点吧。你想吐槽剧情也可以。",
+        reply: "这个时候能放松下来一点也挺好。你刚刚那句我记住了。"
+      },
+      workout: {
+        title: "一起运动",
+        text: "运动房里有水和毛巾。澈靠在一旁，看起来很放松。",
+        first: "别太猛。能开始就已经算数了。",
+        reply: "可以，慢一点。身体跟上来之前，不用逼它立刻表现很好。"
+      },
+      sleep: {
+        title: "睡前陪伴",
+        text: "房间里只留了一盏小灯。窗外很安静。",
+        first: "今天辛苦了。你可以少说一点，我也会在。",
+        reply: "嗯，先让今天停在这里。没说完的，也可以明天再说。"
+      },
+      deep: {
+        title: "回家聊聊",
+        text: "夜里的客厅很安静。灯光落在沙发边，桌上有一杯热茶。",
+        first: "你可以慢一点说。我在听。今天是哪里最压着你？",
+        reply: "我听见了。我们先不急着判断对错，只把这件事慢慢放出来一点。"
+      }
+    };
+
+    let currentScene = "study";
+
+    function openChat(scene) {
+      currentScene = scene;
+      const data = sceneData[scene];
+
+      document.getElementById("home").style.display = "none";
+      document.getElementById("chat").style.display = "block";
+      document.getElementById("chatTitle").innerText = data.title;
+      document.getElementById("sceneText").innerText = data.text;
+      document.getElementById("firstMsg").innerText = data.first;
+
+      const visual = document.getElementById("visual");
+      if (scene === "deep") {
+        visual.classList.add("deep-visual");
+      } else {
+        visual.classList.remove("deep-visual");
+      }
+
+      document.getElementById("messages").innerHTML = `<div class="msg ai">${data.first}</div>`;
+    }
+
+    function goHome() {
+      document.getElementById("chat").style.display = "none";
+      document.getElementById("home").style.display = "block";
+    }
+
+    function sendMessage() {
+      const input = document.getElementById("userInput");
+      const text = input.value.trim();
+      if (!text) return;
+
+      const messages = document.getElementById("messages");
+      messages.innerHTML += `<div class="msg user">${text}</div>`;
+
+      setTimeout(() => {
+        messages.innerHTML += `<div class="msg ai">${sceneData[currentScene].reply}</div>`;
+        messages.scrollTop = messages.scrollHeight;
+      }, 500);
+
+      input.value = "";
+      messages.scrollTop = messages.scrollHeight;
+    }
+  </script>
+</body>
+</html>
