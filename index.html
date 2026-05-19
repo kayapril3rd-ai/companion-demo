@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>澈｜AI陪伴 Demo</title>
+
   <style>
     * {
       box-sizing: border-box;
@@ -12,144 +13,307 @@
     body {
       margin: 0;
       font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
-      background: #f6f1ea;
-      color: #2d2a26;
+      background: #151515;
+      color: #f7f1e8;
     }
 
     .app {
       max-width: 430px;
       margin: 0 auto;
       min-height: 100vh;
-      background: #fbf7f1;
-      box-shadow: 0 0 30px rgba(0,0,0,0.08);
+      background: #191919;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 0 30px rgba(0,0,0,0.35);
     }
 
-    header {
-      padding: 28px 22px 18px;
-      background: linear-gradient(180deg, #2e3642, #59616b);
-      color: white;
-      border-bottom-left-radius: 28px;
-      border-bottom-right-radius: 28px;
+    .home-scroll {
+      height: 100vh;
+      overflow-y: auto;
+      padding: 18px 16px 92px;
     }
 
-    .tag {
+    .top-line {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+      color: #c9beb1;
       font-size: 13px;
-      opacity: 0.8;
-      margin-bottom: 8px;
+    }
+
+    .hero-card {
+      min-height: 280px;
+      border-radius: 30px;
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      background:
+        linear-gradient(180deg, rgba(20,20,20,0.1), rgba(20,20,20,0.78)),
+        radial-gradient(circle at 70% 20%, #9a8b7a, transparent 28%),
+        linear-gradient(135deg, #28313b, #1b1b1b 55%, #4c392e);
+      box-shadow: 0 18px 40px rgba(0,0,0,0.35);
+      margin-bottom: 22px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-card::before {
+      content: "☾";
+      position: absolute;
+      top: 36px;
+      right: 36px;
+      width: 100px;
+      height: 100px;
+      border-radius: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 52px;
+      background: rgba(255,255,255,0.12);
+      backdrop-filter: blur(8px);
+      color: rgba(255,255,255,0.8);
+    }
+
+    .hero-tag {
+      width: fit-content;
+      padding: 7px 11px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.14);
+      color: #f5eadf;
+      font-size: 12px;
+      margin-bottom: 12px;
     }
 
     h1 {
       margin: 0;
-      font-size: 28px;
-      letter-spacing: 2px;
+      font-size: 30px;
+      letter-spacing: 1px;
     }
 
-    .subtitle {
+    .hero-text {
       margin-top: 10px;
-      line-height: 1.6;
+      line-height: 1.7;
       font-size: 14px;
-      opacity: 0.92;
+      color: #eadfd2;
+      max-width: 300px;
     }
 
-    .section {
-      padding: 20px;
+    .hero-button {
+      margin-top: 18px;
+      width: fit-content;
+      border: none;
+      border-radius: 999px;
+      padding: 11px 16px;
+      background: #f2e6d7;
+      color: #26201c;
+      font-size: 14px;
+      cursor: pointer;
     }
 
-    .card {
-      background: white;
-      border-radius: 22px;
-      padding: 18px;
-      margin-bottom: 16px;
-      box-shadow: 0 8px 24px rgba(80, 60, 40, 0.08);
-    }
-
-    .character {
-      display: flex;
-      gap: 14px;
-      align-items: center;
-    }
-
-    .avatar {
-      width: 72px;
-      height: 72px;
-      border-radius: 24px;
-      background: linear-gradient(135deg, #d8dce1, #9ca6b2);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 34px;
-    }
-
-    .name {
-      font-size: 20px;
+    .section-title {
+      margin: 22px 4px 12px;
+      font-size: 17px;
       font-weight: 700;
-      margin-bottom: 6px;
+      color: #f8efe4;
     }
 
-    .status {
-      font-size: 14px;
-      color: #6b6259;
+    .section-subtitle {
+      margin: -6px 4px 12px;
+      font-size: 12px;
+      color: #9d9286;
       line-height: 1.5;
     }
 
-    .grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
+    .scene-list {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
     }
 
-    .scene {
-      border: none;
-      border-radius: 18px;
-      padding: 16px;
-      min-height: 96px;
-      background: #f1ebe2;
-      text-align: left;
+    .scene-card {
+      min-height: 164px;
+      border-radius: 26px;
+      padding: 18px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background:
+        linear-gradient(180deg, rgba(0,0,0,0.05), rgba(0,0,0,0.6)),
+        linear-gradient(135deg, #55473b, #242424);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
       cursor: pointer;
-      font-size: 15px;
-      color: #2d2a26;
+      overflow: hidden;
+      position: relative;
+      box-shadow: 0 12px 28px rgba(0,0,0,0.25);
     }
 
-    .scene span {
-      display: block;
-      font-size: 26px;
-      margin-bottom: 8px;
+    .scene-card::after {
+      content: "";
+      position: absolute;
+      width: 130px;
+      height: 130px;
+      right: -28px;
+      top: -18px;
+      border-radius: 40px;
+      background: rgba(255,255,255,0.08);
+      transform: rotate(18deg);
     }
 
-    .deep-button {
-      width: 100%;
-      border: none;
-      border-radius: 18px;
-      padding: 16px;
-      background: #2f3742;
-      color: white;
-      font-size: 16px;
+    .scene-card.study {
+      background:
+        linear-gradient(180deg, rgba(0,0,0,0.05), rgba(0,0,0,0.62)),
+        linear-gradient(135deg, #5b5142, #1d2832);
+    }
+
+    .scene-card.drama {
+      background:
+        linear-gradient(180deg, rgba(0,0,0,0.05), rgba(0,0,0,0.62)),
+        linear-gradient(135deg, #5e3e42, #212029);
+    }
+
+    .scene-card.workout {
+      background:
+        linear-gradient(180deg, rgba(0,0,0,0.05), rgba(0,0,0,0.62)),
+        linear-gradient(135deg, #394b44, #1f2522);
+    }
+
+    .scene-card.sleep {
+      background:
+        linear-gradient(180deg, rgba(0,0,0,0.05), rgba(0,0,0,0.62)),
+        linear-gradient(135deg, #28324a, #17191f);
+    }
+
+    .scene-card.deep {
+      background:
+        linear-gradient(180deg, rgba(0,0,0,0.08), rgba(0,0,0,0.7)),
+        radial-gradient(circle at 80% 20%, #8f6c4f, transparent 30%),
+        linear-gradient(135deg, #3a302b, #181414);
+    }
+
+    .scene-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: rgba(255,255,255,0.76);
+      font-size: 12px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .scene-title {
+      font-size: 22px;
+      font-weight: 750;
+      margin-top: 34px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .scene-desc {
+      margin-top: 8px;
+      line-height: 1.55;
+      font-size: 13px;
+      color: rgba(255,255,255,0.82);
+      max-width: 280px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .scene-action {
+      margin-top: 14px;
+      font-size: 13px;
+      color: #f4e5d5;
+      position: relative;
+      z-index: 1;
+    }
+
+    .memory-card {
+      margin-top: 14px;
+      background: #23211f;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 24px;
+      padding: 18px;
+      color: #d7cabe;
+      line-height: 1.7;
+      font-size: 13px;
+    }
+
+    .schedule-bar {
+      position: absolute;
+      left: 16px;
+      right: 16px;
+      bottom: 16px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(35,35,35,0.9);
+      color: #f5eadf;
+      border-radius: 22px;
+      padding: 14px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      backdrop-filter: blur(12px);
       cursor: pointer;
-      margin-top: 6px;
+      box-shadow: 0 14px 32px rgba(0,0,0,0.3);
+    }
+
+    .schedule-bar-main {
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .schedule-bar-sub {
+      font-size: 12px;
+      color: #9e9388;
+      margin-top: 3px;
     }
 
     .chat-page {
       display: none;
       min-height: 100vh;
       background: #eee6dc;
+      color: #2d2a26;
     }
 
     .chat-header {
-      padding: 18px;
-      background: #3d4652;
+      padding: 16px;
+      background: #292c31;
       color: white;
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
 
-    .back {
+    .chat-title-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .chat-title {
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .chat-sub {
+      font-size: 12px;
+      color: rgba(255,255,255,0.66);
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .back,
+    .deep-mini {
       border: none;
-      background: rgba(255,255,255,0.18);
+      background: rgba(255,255,255,0.16);
       color: white;
       border-radius: 12px;
-      padding: 8px 12px;
+      padding: 8px 10px;
       cursor: pointer;
+      font-size: 12px;
     }
 
     .scene-visual {
@@ -157,20 +321,51 @@
       padding: 20px;
       display: flex;
       align-items: flex-end;
-      background: linear-gradient(180deg, #65707b, #e5d9ca);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.05), rgba(0,0,0,0.48)),
+        linear-gradient(135deg, #68717b, #d7c3aa);
     }
 
-    .deep-visual {
-      background: linear-gradient(180deg, #342d2b, #b98d67);
+    .scene-visual.study-visual {
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.04), rgba(0,0,0,0.5)),
+        linear-gradient(135deg, #56616b, #c7b49c);
+    }
+
+    .scene-visual.drama-visual {
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.04), rgba(0,0,0,0.5)),
+        linear-gradient(135deg, #4f3a42, #b79d8a);
+    }
+
+    .scene-visual.workout-visual {
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.04), rgba(0,0,0,0.5)),
+        linear-gradient(135deg, #45584d, #b7b69c);
+    }
+
+    .scene-visual.sleep-visual {
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.04), rgba(0,0,0,0.55)),
+        linear-gradient(135deg, #26314a, #958e9c);
+    }
+
+    .scene-visual.deep-visual {
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.58)),
+        radial-gradient(circle at 75% 25%, #c0956d, transparent 28%),
+        linear-gradient(135deg, #312928, #8b624a);
     }
 
     .person-card {
       width: 100%;
       padding: 18px;
       border-radius: 22px;
-      background: rgba(255,255,255,0.75);
+      background: rgba(255,255,255,0.78);
       backdrop-filter: blur(8px);
       line-height: 1.6;
+      font-size: 14px;
+      color: #2d2925;
     }
 
     .messages {
@@ -216,6 +411,7 @@
       padding: 14px;
       font-size: 15px;
       outline: none;
+      background: #f6f1ea;
     }
 
     .send {
@@ -227,116 +423,208 @@
       cursor: pointer;
     }
 
-    .schedule-item {
-      display: flex;
-      justify-content: space-between;
-      border-bottom: 1px solid #eee;
-      padding: 10px 0;
-      font-size: 14px;
+    .drawer-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.45);
+      z-index: 20;
+      justify-content: center;
+      align-items: flex-end;
     }
 
-    .small-title {
-      font-size: 15px;
-      font-weight: 700;
+    .drawer {
+      width: 100%;
+      max-width: 430px;
+      max-height: 82vh;
+      overflow-y: auto;
+      background: #f8f1e8;
+      color: #2d2a26;
+      border-top-left-radius: 30px;
+      border-top-right-radius: 30px;
+      padding: 18px 16px 24px;
+      box-shadow: 0 -20px 40px rgba(0,0,0,0.35);
+    }
+
+    .drawer-handle {
+      width: 44px;
+      height: 5px;
+      border-radius: 999px;
+      background: #c7baab;
+      margin: 0 auto 16px;
+    }
+
+    .drawer-title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .drawer-title {
+      font-size: 18px;
+      font-weight: 750;
+    }
+
+    .close-drawer {
+      border: none;
+      background: #e8ded2;
+      border-radius: 999px;
+      padding: 8px 12px;
+      cursor: pointer;
+      color: #4b433d;
+    }
+
+    .drawer-section {
+      margin-top: 18px;
+    }
+
+    .drawer-section-title {
+      font-size: 14px;
+      font-weight: 750;
+      margin-bottom: 10px;
+      color: #4a4038;
+    }
+
+    .plan-input-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .mini-button {
+      border: none;
+      border-radius: 16px;
+      padding: 0 14px;
+      background: #2f3742;
+      color: white;
+      cursor: pointer;
+      font-size: 14px;
+      white-space: nowrap;
+    }
+
+    .plan-item {
+      background: white;
+      border-radius: 18px;
+      padding: 13px;
+      margin-bottom: 10px;
+      box-shadow: 0 6px 18px rgba(80, 60, 40, 0.06);
+    }
+
+    .plan-main {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 14px;
       margin-bottom: 10px;
     }
 
-    .hint {
-      font-size: 13px;
-      color: #7a7068;
-      line-height: 1.6;
+    .plan-time {
+      color: #7b7168;
+      flex: 0 0 auto;
     }
-    .plan-input-row {
-  display: flex;
-  gap: 10px;
-  margin-top: 14px;
-  margin-bottom: 12px;
-}
 
-.plan-input-row input {
-  background: #f6f1ea;
-}
+    .plan-content {
+      text-align: right;
+      font-weight: 650;
+    }
 
-.mini-button {
-  border: none;
-  border-radius: 16px;
-  padding: 0 16px;
-  background: #2f3742;
-  color: white;
-  cursor: pointer;
-  font-size: 14px;
-  white-space: nowrap;
-}
+    .invite-button {
+      width: 100%;
+      border: none;
+      border-radius: 14px;
+      padding: 10px;
+      background: #f0e5d8;
+      color: #3b332d;
+      cursor: pointer;
+      font-size: 13px;
+    }
+
+    .che-plan {
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px solid #eadfd4;
+      padding: 11px 0;
+      font-size: 14px;
+    }
+
+    .che-plan span:first-child {
+      color: #7b7168;
+    }
+
+    .invite-response {
+      display: none;
+      margin-top: 14px;
+      padding: 14px;
+      border-radius: 18px;
+      background: #262522;
+      color: #f1e6d9;
+      line-height: 1.6;
+      font-size: 13px;
+    }
+
+    .invite-response button {
+      margin-top: 10px;
+      border: none;
+      border-radius: 14px;
+      padding: 10px 12px;
+      background: #f2e6d7;
+      color: #26201c;
+      cursor: pointer;
+    }
   </style>
 </head>
+
 <body>
   <div class="app" id="home">
-    <header>
-      <div class="tag">AI 陪伴 · 日常一起生活</div>
-      <h1>澈</h1>
-      <div class="subtitle">
-        他有自己的生活节奏，也可以在你的日常里陪你一段。学习、看剧、运动，或者只是认真聊聊。
+    <div class="home-scroll">
+      <div class="top-line">
+        <span id="currentTime">21:18</span>
+        <span>今日生活交汇</span>
       </div>
-    </header>
 
-    <div class="section">
-      <div class="card character">
-        <div class="avatar">☾</div>
-        <div>
-          <div class="name">澈</div>
-          <div class="status">今天在家工作。晚上可能会看一会儿书。如果你要学习，他可以陪你安静待一会儿。</div>
+      <div class="hero-card" onclick="openChat('casual')">
+        <div class="hero-tag">澈此刻在家</div>
+        <h1>灯刚亮起来。</h1>
+        <div class="hero-text">
+          他刚把书合上。今晚不算太吵，你想找个人待一会儿的话，可以去找他。
         </div>
+        <button class="hero-button">去找他</button>
       </div>
 
-      <div class="card">
-        <div class="small-title">今天可以一起做</div>
-        <div class="grid">
-          <button class="scene" onclick="openChat('study')"><span>📖</span>一起学习</button>
-          <button class="scene" onclick="openChat('drama')"><span>📺</span>一起看剧</button>
-          <button class="scene" onclick="openChat('workout')"><span>🏃</span>一起运动</button>
-          <button class="scene" onclick="openChat('sleep')"><span>🌙</span>睡前陪伴</button>
-        </div>
+      <div class="section-title">今日可以一起做</div>
+      <div class="section-subtitle">这些不是功能入口，是你们今天可能交汇的片段。</div>
+
+      <div class="scene-list" id="sceneCards"></div>
+
+      <div class="section-title">最近的小片段</div>
+      <div class="memory-card">
+        你们一起学习过一次。<br />
+        澈记得你这周说过想恢复运动。<br />
+        今晚如果太累，可以只说几句。
       </div>
+    </div>
 
-      <div class="card">
-        <div class="small-title">想认真聊聊吗？</div>
-        <div class="hint">
-          如果今天有些事压着你，可以回到一个更安静的地方，慢慢说。
-        </div>
-        <button class="deep-button" onclick="openChat('deep')">回家聊聊</button>
+    <div class="schedule-bar" onclick="openScheduleDrawer()">
+      <div>
+        <div class="schedule-bar-main">今天的日程</div>
+        <div class="schedule-bar-sub" id="scheduleSummary">你 2 件事 / 澈 4 件事</div>
       </div>
-<div class="card">
-  <div class="small-title">澈的今天</div>
-  <div class="schedule-item"><span>10:00</span><span>在家工作</span></div>
-  <div class="schedule-item"><span>17:30</span><span>去运动</span></div>
-  <div class="schedule-item"><span>21:00</span><span>看书 / 放松</span></div>
-  <div class="schedule-item"><span>23:30</span><span>可以陪你睡前聊聊</span></div>
-</div>
-
-<div class="card">
-  <div class="small-title">你的今天</div>
-  <div class="hint">写下一件今天想做的事，也可以让澈陪你一起做。</div>
-
-  <div class="plan-input-row">
-    <input id="planInput" placeholder="比如：20:00 学习英语" />
-    <button class="mini-button" onclick="addPlan()">添加</button>
+      <div>⌃</div>
+    </div>
   </div>
-
-   <div id="userPlans">
-    <div class="schedule-item"><span>20:00</span><span>学习英语</span></div>
-    <div class="schedule-item"><span>22:00</span><span>看一集剧放松</span></div>
-  </div>
-</div>
-
-</div>
-</div>
-
-<div class="app chat-page" id="chat">
 
   <div class="app chat-page" id="chat">
     <div class="chat-header">
-      <div id="chatTitle">一起学习</div>
-      <button class="back" onclick="goHome()">返回</button>
+      <div class="chat-title-wrap">
+        <div class="chat-title" id="chatTitle">一起学习</div>
+        <div class="chat-sub" id="chatSub">当前场景</div>
+      </div>
+
+      <div class="header-actions">
+        <button class="deep-mini" id="deepMiniBtn" onclick="openChat('deep')">回家坐会儿</button>
+        <button class="back" onclick="goHome()">返回</button>
+      </div>
     </div>
 
     <div class="scene-visual" id="visual">
@@ -345,246 +633,501 @@
       </div>
     </div>
 
-    <div class="messages" id="messages">
-      <div class="msg ai" id="firstMsg">我在。你先做你的，不用一直说话。</div>
-    </div>
+    <div class="messages" id="messages"></div>
 
     <div class="input-area">
       <input id="userInput" placeholder="和他说点什么..." />
       <button class="send" onclick="sendMessage()">发送</button>
     </div>
   </div>
-<script>
-  const sceneData = {
-    study: {
-      type: "daily",
-      title: "一起学习",
-      text: "书桌旁的灯亮着。澈坐在你旁边，手边放着一本书。",
-      first: "我在旁边陪你。先开始十分钟也可以，不用一下子进入状态。"
-    },
-    drama: {
-      type: "daily",
-      title: "一起看剧",
-      text: "客厅里光线很软，电视亮着。澈把声音调低了一点。",
-      first: "今天就轻松一点吧。你想吐槽剧情也可以。"
-    },
-    workout: {
-      type: "daily",
-      title: "一起运动",
-      text: "运动房里有水和毛巾。澈靠在一旁，看起来很放松。",
-      first: "别太猛。能开始就已经算数了。"
-    },
-    sleep: {
-      type: "daily",
-      title: "睡前陪伴",
-      text: "房间里只留了一盏小灯。窗外很安静。",
-      first: "今天辛苦了。你可以少说一点，我也会在。"
-    },
-    deep: {
-      type: "deep",
-      title: "回家聊聊",
-      text: "夜里的客厅很安静。灯光落在沙发边，桌上有一杯热茶。",
-      first: "你可以慢一点说。我在听。今天是哪里最压着你？"
-    }
-  };
 
-  let currentScene = "study";
-  let deepStep = 0;
+  <div class="drawer-overlay" id="drawerOverlay" onclick="closeScheduleDrawer()">
+    <div class="drawer" onclick="event.stopPropagation()">
+      <div class="drawer-handle"></div>
 
-  function openChat(scene) {
-    currentScene = scene;
-    deepStep = 0;
+      <div class="drawer-title-row">
+        <div class="drawer-title">今天的日程</div>
+        <button class="close-drawer" onclick="closeScheduleDrawer()">收起</button>
+      </div>
 
-    const data = sceneData[scene];
+      <div class="drawer-section">
+        <div class="drawer-section-title">你的今天</div>
 
-    document.getElementById("home").style.display = "none";
-    document.getElementById("chat").style.display = "block";
-    document.getElementById("chatTitle").innerText = data.title;
-    document.getElementById("sceneText").innerText = data.text;
+        <div class="plan-input-row">
+          <input id="planInput" placeholder="比如：20:00 学习英语" />
+          <button class="mini-button" onclick="addPlan()">添加</button>
+        </div>
 
-    const visual = document.getElementById("visual");
-    if (scene === "deep") {
-      visual.classList.add("deep-visual");
-    } else {
-      visual.classList.remove("deep-visual");
-    }
+        <div id="userPlans"></div>
+        <div class="invite-response" id="inviteResponse"></div>
+      </div>
 
-    document.getElementById("messages").innerHTML =
-      `<div class="msg ai">${data.first}</div>`;
-  }
+      <div class="drawer-section">
+        <div class="drawer-section-title">澈的今天</div>
 
-  function goHome() {
-    document.getElementById("chat").style.display = "none";
-    document.getElementById("home").style.display = "block";
-  }
-
-  function sendMessage() {
-    const input = document.getElementById("userInput");
-    const text = input.value.trim();
-
-    if (!text) return;
-
-    addMessage(text, "user");
-    input.value = "";
-
-    setTimeout(() => {
-      const reply = generateReply(text);
-      addMessage(reply, "ai");
-    }, 500);
-  }
-
-  function addMessage(text, role) {
-    const messages = document.getElementById("messages");
-    messages.innerHTML += `<div class="msg ${role}">${escapeHtml(text)}</div>`;
-    messages.scrollTop = messages.scrollHeight;
-  }
-
-  function generateReply(userText) {
-    const scene = sceneData[currentScene];
-
-    if (scene.type === "deep") {
-      return generateDeepReply(userText);
-    }
-
-    return generateDailyReply(userText, currentScene);
-  }
-
-  function generateDailyReply(userText, scene) {
-    const text = userText.toLowerCase();
-
-    if (text.includes("累") || text.includes("困") || text.includes("烦")) {
-      return "嗯，今天像是有点耗着了。你不用马上打起精神，我先陪你待一会儿。";
-    }
-
-    if (text.includes("不想") || text.includes("没劲") || text.includes("摆烂")) {
-      return "可以先不用逼自己进入状态。我们把这件事放小一点，先从很轻的一步开始。";
-    }
-
-    if (text.includes("开始") || text.includes("学习") || text.includes("工作")) {
-      return "好，我在旁边。你先开始，我不打扰你。想说话的时候再叫我。";
-    }
-
-    if (text.includes("看剧") || text.includes("剧情") || text.includes("好笑")) {
-      return "这个可以慢慢看。你想吐槽也行，我听着。";
-    }
-
-    if (text.includes("运动") || text.includes("健身") || text.includes("练")) {
-      return "别一下子太狠。能动起来就已经很好了，我陪你把这一段做完。";
-    }
-
-    if (text.includes("睡") || text.includes("晚安")) {
-      return "嗯，今天先慢慢收起来。没做完的、没想清的，都可以明天再放出来。";
-    }
-
-    const dailyReplies = [
-      "嗯，我在。你继续做你的，也可以随时跟我说一句。",
-      "听到了。今天不用太用力，我们就这样慢慢待一会儿。",
-      "可以。你不用一直找话说，我陪着就行。",
-      "这句话我接住了。你先按自己的节奏来。",
-      "嗯，像是今天的一小段停留。我们不用急着把它变得很有意义。"
-    ];
-
-    return randomPick(dailyReplies);
-  }
-
-  function generateDeepReply(userText) {
-    const text = userText.toLowerCase();
-
-    if (text.includes("不想聊") || text.includes("先不用") || text.includes("算了")) {
-      deepStep = 0;
-      return "好，那我们先不往里走。你可以只是坐一会儿，我也在。";
-    }
-
-    if (text.includes("想死") || text.includes("不想活") || text.includes("自杀")) {
-      return "我听见这句话很重。现在先不要一个人扛着，尽快联系身边可信的人，或当地紧急求助热线。你现在的安全最重要。";
-    }
-
-    deepStep += 1;
-
-    if (deepStep === 1) {
-      if (text.includes("不知道") || text.includes("说不清") || text.includes("难受")) {
-        return "先不急着解释原因。这个难受现在更像是累、委屈，还是有点空？";
-      }
-
-      if (text.includes("纠结") || text.includes("要不要") || text.includes("选择")) {
-        return "你现在像是站在两边中间。先不急着选，哪一边更让你放不下？";
-      }
-
-      if (text.includes("我很差") || text.includes("不行") || text.includes("失败")) {
-        return "刚刚那一下里，好像最刺你的，是“我是不是不够好”这个念头。它是突然冒出来的吗？";
-      }
-
-      return "我听见了。我们先不急着判断对错。你愿意从最压着你的那一处开始说吗？";
-    }
-
-    if (deepStep === 2) {
-      return "嗯，这里有一层情绪，也有一层你对自己的判断。我们先分开一点看：当时发生的事，和你心里冒出来的那句话，分别是什么？";
-    }
-
-    if (deepStep === 3) {
-      return "这件事本身已经够重了，后面那句对自己的判断，又让它更疼了一点。有没有一种说法，不是替它开脱，只是没那么伤你？";
-    }
-
-    if (deepStep === 4) {
-      return "这样看，它好像不是一下子被解决了，但至少不再全部压成一团。你已经把里面最重的一点拿出来了。";
-    }
-
-    const deepReplies = [
-      "我们可以先停在这里，不用继续往深处走。",
-      "这已经说得够多了。你不用马上变好，先让自己缓一口气。",
-      "我在。刚刚那些话没有白说，它们已经从心里出来了一点。",
-      "有些事不是聊一次就会轻，但你刚刚已经没有完全一个人扛着了。"
-    ];
-
-    return randomPick(deepReplies);
-  }
-
-  function randomPick(list) {
-    return list[Math.floor(Math.random() * list.length)];
-  }
-
-function escapeHtml(text) {
-  return text
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
-}
-  function addPlan() {
-  const input = document.getElementById("planInput");
-  const text = input.value.trim();
-
-  if (!text) return;
-
-  const userPlans = document.getElementById("userPlans");
-
-  let time = "今天";
-  let content = text;
-
-  const timeMatch = text.match(/^(\d{1,2}:\d{2})\s*(.*)$/);
-  if (timeMatch) {
-    time = timeMatch[1];
-    content = timeMatch[2] || "一件事";
-  }
-
-  userPlans.innerHTML += `
-    <div class="schedule-item">
-      <span>${escapeHtml(time)}</span>
-      <span>${escapeHtml(content)}</span>
+        <div class="che-plan"><span>10:00</span><span>在家工作</span></div>
+        <div class="che-plan"><span>17:30</span><span>去运动</span></div>
+        <div class="che-plan"><span>21:00</span><span>看书 / 放松</span></div>
+        <div class="che-plan" onclick="openChat('deep')" style="cursor:pointer;">
+          <span>23:00</span><span>客厅休息 · 可以认真聊聊</span>
+        </div>
+      </div>
     </div>
-  `;
+  </div>
 
-  input.value = "";
-}
-  document.addEventListener("DOMContentLoaded", () => {
-    const input = document.getElementById("userInput");
-    input.addEventListener("keydown", function(event) {
-      if (event.key === "Enter") {
-        sendMessage();
+  <script>
+    const sceneData = {
+      study: {
+        type: "daily",
+        title: "一起学习",
+        sub: "书桌 · 安静陪伴",
+        text: "书桌旁的灯亮着。澈坐在你旁边，手边放着一本书。",
+        first: "我在旁边陪你。先开始十分钟也可以，不用一下子进入状态。"
+      },
+      drama: {
+        type: "daily",
+        title: "一起看剧",
+        sub: "客厅 · 放松一点",
+        text: "客厅里光线很软，电视亮着。澈把声音调低了一点。",
+        first: "今天就轻松一点吧。你想吐槽剧情也可以。"
+      },
+      workout: {
+        type: "daily",
+        title: "运动前陪伴",
+        sub: "运动 · 先动起来",
+        text: "运动前的房间里有水和毛巾。澈靠在一旁，看起来很放松。",
+        first: "别太猛。能开始就已经算数了。"
+      },
+      eat: {
+        type: "daily",
+        title: "一起吃饭",
+        sub: "餐桌 · 慢慢吃",
+        text: "餐桌上的灯很暖。澈坐在对面，把手机放远了一点。",
+        first: "先好好吃饭。今天不用一边吃一边绷着。"
+      },
+      sleep: {
+        type: "daily",
+        title: "睡前聊会儿",
+        sub: "房间 · 小灯亮着",
+        text: "房间里只留了一盏小灯。窗外很安静。",
+        first: "今天辛苦了。你可以少说一点，我也会在。"
+      },
+      casual: {
+        type: "daily",
+        title: "去找他",
+        sub: "此刻 · 在家",
+        text: "家里的灯亮着。澈刚把书合上，抬头看向你。",
+        first: "来了？今天想安静待一会儿，还是随便说点什么。"
+      },
+      deep: {
+        type: "deep",
+        title: "回家坐会儿",
+        sub: "客厅 · 慢慢说",
+        text: "夜里的客厅很安静。灯光落在沙发边，桌上有一杯还温着的茶。",
+        first: "你可以慢一点说。我在听。今天是哪里最压着你？"
       }
+    };
+
+    let currentScene = "study";
+    let deepStep = 0;
+
+    let userPlans = [
+      { time: "20:00", content: "学习英语" },
+      { time: "22:00", content: "看一集剧放松" }
+    ];
+
+    let sceneCards = [
+      {
+        id: "default-study",
+        time: "20:00",
+        scene: "study",
+        title: "一起学习",
+        desc: "你要学习英语，澈那会儿也会在书桌旁。",
+        meta: "书桌 · 安静陪伴"
+      },
+      {
+        id: "default-drama",
+        time: "22:00",
+        scene: "drama",
+        title: "一起看剧",
+        desc: "今晚可以轻一点。他在客厅，适合放松。",
+        meta: "客厅 · 放松一点"
+      },
+      {
+        id: "default-deep",
+        time: "今晚",
+        scene: "deep",
+        title: "回家坐会儿",
+        desc: "如果今天有点重，可以去客厅慢慢说。",
+        meta: "客厅 · 深入聊天"
+      }
+    ];
+
+    function renderSceneCards() {
+      const container = document.getElementById("sceneCards");
+
+      container.innerHTML = sceneCards.map(card => `
+        <div class="scene-card ${card.scene}" onclick="openChat('${card.scene}')">
+          <div class="scene-meta">
+            <span>${escapeHtml(card.time)}</span>
+            <span>${escapeHtml(card.meta)}</span>
+          </div>
+          <div>
+            <div class="scene-title">${escapeHtml(card.title)}</div>
+            <div class="scene-desc">${escapeHtml(card.desc)}</div>
+            <div class="scene-action">进入场景 →</div>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function renderPlans() {
+      const userPlansEl = document.getElementById("userPlans");
+
+      userPlansEl.innerHTML = userPlans.map((plan, index) => `
+        <div class="plan-item">
+          <div class="plan-main">
+            <span class="plan-time">${escapeHtml(plan.time)}</span>
+            <span class="plan-content">${escapeHtml(plan.content)}</span>
+          </div>
+          <button class="invite-button" onclick="inviteChe(${index})">邀请澈一起</button>
+        </div>
+      `).join("");
+
+      document.getElementById("scheduleSummary").innerText =
+        `你 ${userPlans.length} 件事 / 澈 4 件事`;
+    }
+
+    function openScheduleDrawer() {
+      document.getElementById("drawerOverlay").style.display = "flex";
+    }
+
+    function closeScheduleDrawer() {
+      document.getElementById("drawerOverlay").style.display = "none";
+    }
+
+    function addPlan() {
+      const input = document.getElementById("planInput");
+      const rawText = input.value.trim();
+
+      if (!rawText) return;
+
+      let time = "今天";
+      let content = rawText;
+
+      const timeMatch = rawText.match(/^(\d{1,2}:\d{2})\s*(.*)$/);
+      if (timeMatch) {
+        time = timeMatch[1];
+        content = timeMatch[2] || "一件事";
+      }
+
+      userPlans.push({ time, content });
+      input.value = "";
+      renderPlans();
+    }
+
+    function inviteChe(index) {
+      const plan = userPlans[index];
+      const result = getInviteResult(plan);
+
+      const response = document.getElementById("inviteResponse");
+      response.style.display = "block";
+
+      response.innerHTML = `
+        <strong>澈：</strong><br />
+        ${escapeHtml(result.reply)}
+        <br />
+        <button onclick="createSharedScene('${result.scene}', '${escapeAttr(plan.time)}', '${escapeAttr(result.title)}', '${escapeAttr(result.desc)}', '${escapeAttr(result.meta)}')">
+          生成一起做的场景
+        </button>
+      `;
+
+      response.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
+
+    function getInviteResult(plan) {
+      const content = plan.content;
+
+      if (content.includes("学习") || content.includes("工作") || content.includes("写作业") || content.includes("复习")) {
+        return {
+          scene: "study",
+          title: "一起学习",
+          meta: "书桌 · 安静陪伴",
+          desc: `你要${content}，澈那会儿也适合安静待着。`,
+          reply: "可以。我那会儿也适合安静待着。你开始的时候叫我一声，我陪你学一会儿。"
+        };
+      }
+
+      if (content.includes("看剧") || content.includes("电影") || content.includes("综艺")) {
+        return {
+          scene: "drama",
+          title: "一起看剧",
+          meta: "客厅 · 放松一点",
+          desc: `你想${content}，澈今晚也在客厅。`,
+          reply: "这个可以。晚上适合轻松一点，我陪你看。你想吐槽也可以。"
+        };
+      }
+
+      if (content.includes("运动") || content.includes("健身") || content.includes("跑步") || content.includes("练")) {
+        return {
+          scene: "workout",
+          title: "运动前陪伴",
+          meta: "运动 · 先动起来",
+          desc: `你要${content}，澈可能赶不上全程，但可以陪你开始。`,
+          reply: "我可能赶不上全程，但你开始前可以叫我一声。我陪你热身，先把身体叫醒。"
+        };
+      }
+
+      if (content.includes("吃饭") || content.includes("晚饭") || content.includes("午饭") || content.includes("早餐")) {
+        return {
+          scene: "eat",
+          title: "一起吃饭",
+          meta: "餐桌 · 慢慢吃",
+          desc: `你要${content}，澈可以陪你把这顿饭慢慢吃完。`,
+          reply: "可以。吃饭的时候就先别绷着了，我陪你慢慢吃。"
+        };
+      }
+
+      if (content.includes("难受") || content.includes("崩") || content.includes("想聊") || content.includes("睡前") || content.includes("emo")) {
+        return {
+          scene: "deep",
+          title: "回家坐会儿",
+          meta: "客厅 · 慢慢说",
+          desc: "如果今天有点重，可以去客厅慢慢说。",
+          reply: "那我们回客厅聊吧。灯还亮着，你不用在外面硬撑着说。"
+        };
+      }
+
+      return {
+        scene: "casual",
+        title: "陪你待一会儿",
+        meta: "此刻 · 轻陪伴",
+        desc: `你要做「${content}」，澈可以先陪你进入状态。`,
+        reply: "我不确定那会儿能不能完整陪你，但你开始前可以叫我。我陪你把第一步放下来。"
+      };
+    }
+
+    function createSharedScene(scene, time, title, desc, meta) {
+      const newCard = {
+        id: "card-" + Date.now(),
+        time,
+        scene,
+        title,
+        desc,
+        meta
+      };
+
+      sceneCards.unshift(newCard);
+      renderSceneCards();
+      closeScheduleDrawer();
+
+      setTimeout(() => {
+        document.querySelector(".home-scroll").scrollTo({ top: 260, behavior: "smooth" });
+      }, 100);
+    }
+
+    function openChat(scene) {
+      closeScheduleDrawer();
+
+      currentScene = scene;
+      deepStep = 0;
+
+      const data = sceneData[scene];
+
+      document.getElementById("home").style.display = "none";
+      document.getElementById("chat").style.display = "block";
+
+      document.getElementById("chatTitle").innerText = data.title;
+      document.getElementById("chatSub").innerText = data.sub;
+      document.getElementById("sceneText").innerText = data.text;
+
+      const visual = document.getElementById("visual");
+      visual.className = "scene-visual";
+
+      if (scene === "deep") {
+        visual.classList.add("deep-visual");
+        document.getElementById("deepMiniBtn").style.display = "none";
+      } else {
+        visual.classList.add(scene + "-visual");
+        document.getElementById("deepMiniBtn").style.display = "block";
+      }
+
+      document.getElementById("messages").innerHTML =
+        `<div class="msg ai">${data.first}</div>`;
+    }
+
+    function goHome() {
+      document.getElementById("chat").style.display = "none";
+      document.getElementById("home").style.display = "block";
+    }
+
+    function sendMessage() {
+      const input = document.getElementById("userInput");
+      const text = input.value.trim();
+
+      if (!text) return;
+
+      addMessage(text, "user");
+      input.value = "";
+
+      setTimeout(() => {
+        const reply = generateReply(text);
+        addMessage(reply, "ai");
+      }, 500);
+    }
+
+    function addMessage(text, role) {
+      const messages = document.getElementById("messages");
+      messages.innerHTML += `<div class="msg ${role}">${escapeHtml(text)}</div>`;
+      messages.scrollTop = messages.scrollHeight;
+    }
+
+    function generateReply(userText) {
+      const scene = sceneData[currentScene];
+
+      if (scene.type === "deep") {
+        return generateDeepReply(userText);
+      }
+
+      return generateDailyReply(userText);
+    }
+
+    function generateDailyReply(userText) {
+      const text = userText.toLowerCase();
+
+      if (text.includes("累") || text.includes("困") || text.includes("烦")) {
+        return "嗯，今天像是有点耗着了。你不用马上打起精神，我先陪你待一会儿。";
+      }
+
+      if (text.includes("不想") || text.includes("没劲") || text.includes("摆烂")) {
+        return "可以先不用逼自己进入状态。我们把这件事放小一点，先从很轻的一步开始。";
+      }
+
+      if (text.includes("开始") || text.includes("学习") || text.includes("工作")) {
+        return "好，我在旁边。你先开始，我不打扰你。想说话的时候再叫我。";
+      }
+
+      if (text.includes("看剧") || text.includes("剧情") || text.includes("好笑")) {
+        return "这个可以慢慢看。你想吐槽也行，我听着。";
+      }
+
+      if (text.includes("运动") || text.includes("健身") || text.includes("练")) {
+        return "别一下子太狠。能动起来就已经很好了，我陪你把这一段做完。";
+      }
+
+      if (text.includes("睡") || text.includes("晚安")) {
+        return "嗯，今天先慢慢收起来。没做完的、没想清的，都可以明天再放出来。";
+      }
+
+      const dailyReplies = [
+        "嗯，我在。你继续做你的，也可以随时跟我说一句。",
+        "听到了。今天不用太用力，我们就这样慢慢待一会儿。",
+        "可以。你不用一直找话说，我陪着就行。",
+        "这句话我接住了。你先按自己的节奏来。",
+        "嗯，像是今天的一小段停留。我们不用急着把它变得很有意义。"
+      ];
+
+      return randomPick(dailyReplies);
+    }
+
+    function generateDeepReply(userText) {
+      const text = userText.toLowerCase();
+
+      if (text.includes("不想聊") || text.includes("先不用") || text.includes("算了")) {
+        deepStep = 0;
+        return "好，那我们先不往里走。你可以只是坐一会儿，我也在。";
+      }
+
+      if (text.includes("想死") || text.includes("不想活") || text.includes("自杀")) {
+        return "我听见这句话很重。现在先不要一个人扛着，尽快联系身边可信的人，或当地紧急求助热线。你现在的安全最重要。";
+      }
+
+      deepStep += 1;
+
+      if (deepStep === 1) {
+        if (text.includes("不知道") || text.includes("说不清") || text.includes("难受")) {
+          return "先不急着解释原因。这个难受现在更像是累、委屈，还是有点空？";
+        }
+
+        if (text.includes("纠结") || text.includes("要不要") || text.includes("选择")) {
+          return "你现在像是站在两边中间。先不急着选，哪一边更让你放不下？";
+        }
+
+        if (text.includes("我很差") || text.includes("不行") || text.includes("失败")) {
+          return "刚刚那一下里，好像最刺你的，是“我是不是不够好”这个念头。它是突然冒出来的吗？";
+        }
+
+        return "我听见了。我们先不急着判断对错。你愿意从最压着你的那一处开始说吗？";
+      }
+
+      if (deepStep === 2) {
+        return "嗯，这里有一层情绪，也有一层你对自己的判断。我们先分开一点看：当时发生的事，和你心里冒出来的那句话，分别是什么？";
+      }
+
+      if (deepStep === 3) {
+        return "这件事本身已经够重了，后面那句对自己的判断，又让它更疼了一点。有没有一种说法，不是替它开脱，只是没那么伤你？";
+      }
+
+      if (deepStep === 4) {
+        return "这样看，它好像不是一下子被解决了，但至少不再全部压成一团。你已经把里面最重的一点拿出来了。";
+      }
+
+      const deepReplies = [
+        "我们可以先停在这里，不用继续往深处走。",
+        "这已经说得够多了。你不用马上变好，先让自己缓一口气。",
+        "我在。刚刚那些话没有白说，它们已经从心里出来了一点。",
+        "有些事不是聊一次就会轻，但你刚刚已经没有完全一个人扛着了。"
+      ];
+
+      return randomPick(deepReplies);
+    }
+
+    function randomPick(list) {
+      return list[Math.floor(Math.random() * list.length)];
+    }
+
+    function escapeHtml(text) {
+      return String(text)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function escapeAttr(text) {
+      return String(text)
+        .replaceAll("\\", "\\\\")
+        .replaceAll("'", "\\'")
+        .replaceAll('"', "&quot;");
+    }
+
+    function updateCurrentTime() {
+      const now = new Date();
+      const hh = String(now.getHours()).padStart(2, "0");
+      const mm = String(now.getMinutes()).padStart(2, "0");
+      document.getElementById("currentTime").innerText = `${hh}:${mm}`;
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      updateCurrentTime();
+      renderSceneCards();
+      renderPlans();
+
+      const userInput = document.getElementById("userInput");
+      userInput.addEventListener("keydown", function(event) {
+        if (event.key === "Enter") {
+          sendMessage();
+        }
+      });
+
+      const planInput = document.getElementById("planInput");
+      planInput.addEventListener("keydown", function(event) {
+        if (event.key === "Enter") {
+          addPlan();
+        }
+      });
     });
-  });
-</script>
+  </script>
 </body>
 </html>
